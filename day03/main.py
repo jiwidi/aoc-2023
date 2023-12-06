@@ -17,35 +17,36 @@ def puzzle_one(content):
     def check_range(x, y):
         if (x<0 or y<0 or x>=len(content) or y>=len(content[x])):
             return False
-        if(re.match(r'[^0-9.]', content[x][y])):
+        if re.match(r'[^\d.\n]', content[x][y]):
             return True
         return False
 
     sol = 0
     for number in found_numbers:
-        print(number)
         line = number[0]
         index = number[1]
         length = number[2]
         possible_ranges = [
-            (line-1, index+i) for i in range(-1, length+1)
+            (line-1, index+i) for i in range(-1, length+1) if line-1 >= 0
         ] + [
-            (line, -1), (line, length)
+            (line, index-1), (line, index+length)
         ] + [
-            (line+1, index+i) for i in range(-1, length+1)
+            (line+1, index+i) for i in range(-1, length+1) if line+1 < len(content)
         ]
         valid = False
         for possible_range in possible_ranges:
             valid = valid or check_range(*possible_range)
-        print(valid)
         if valid:
             sol += number[3]
     return sol
 
+def puzzle_two(content):
+    pass
+
 def main():
     content = read_input()
     print("Solution for puzzle one", puzzle_one(content))
-    # print("Solution for puzzle two", puzzle_two(content))
+    print("Solution for puzzle two", puzzle_two(content))
 
 
 if __name__ == '__main__':
